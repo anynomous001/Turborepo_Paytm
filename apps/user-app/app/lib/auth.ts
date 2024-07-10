@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 const client = new PrismaClient();
 
 
-export const authOptions = {
+export const authOptions: any = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -15,6 +15,10 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any) {
+
+                console.log(credentials)
+
+
                 const hashedPassword = await bcrypt.hash(credentials.password, 10)
                 const existingUser = await client.user.findFirst({
                     where: {
@@ -51,16 +55,17 @@ export const authOptions = {
                     console.error(e);
                 }
                 return null
-            }
+            },
 
         })
-    ],
 
-    session: process.env.JWT_SECRET || 'secret',
+    ],
+    jwt: {
+        session: process.env.JWT_SECRET || 'secret',
+    },
     callbacks: {
         async session({ token, session }: any) {
             session.user.id = token.sub
-
             return session
         }
     }

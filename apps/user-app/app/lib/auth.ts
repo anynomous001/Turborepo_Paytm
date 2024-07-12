@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 
 const client = new PrismaClient();
 
-
+console.log(process.env.JWT_SECRET)
 export const authOptions: any = {
     providers: [
         CredentialsProvider({
@@ -49,7 +49,7 @@ export const authOptions: any = {
                     return {
                         id: user.id.toString(),
                         name: user.name,
-                        email: user.number
+                        email: user.email
                     }
                 } catch (e) {
                     console.error(e);
@@ -69,5 +69,6 @@ export const authOptions: any = {
             return session
         }
     }
+
 
 }

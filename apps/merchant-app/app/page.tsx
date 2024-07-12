@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 
 
 import { useBalance } from "@repo/store/useBalance"
+import { useSession } from "next-auth/react";
 
 // export default function () {
 //   const balance = useBalance();
@@ -16,7 +17,9 @@ import { useBalance } from "@repo/store/useBalance"
 
 export default function Home() {
   const balance = useBalance();
+  const session = useSession()
   return <div>
     hi there {balance}
+    {JSON.stringify(session)}
   </div>
 }

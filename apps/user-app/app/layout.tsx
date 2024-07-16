@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "../provider";
+import AppbarClient from "./AppbarClient";
 
 
 
@@ -18,7 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className={''}>{children}</body>
+        <body className={''}>
+          <div>
+            <AppbarClient />
+            {children}
+          </div>
+        </body>
       </Providers>
     </html>
   );

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@repo/db/client";
+import PrismaClient from "@repo/db/client";
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcrypt'
 

@@ -32,8 +32,8 @@ const OnRampTransactionCard: React.FC<Props> = ({ transactions }) => {
 
     return <Card title="Recent Transactions">
         <div className="pt-2">
-            {transactions?.map(t => <div className="flex justify-between">
-                <div>
+            {transactions?.map(t => <div className="flex justify-between p-4">
+                <div className="">
                     <div className="text-sm">
                         Received INR
                     </div>

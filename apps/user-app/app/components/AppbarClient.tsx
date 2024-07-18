@@ -5,8 +5,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const AppbarClient = () => {
-    const { data: session } = useSession();
     const router = useRouter();
+
+    const { data: session } = useSession();
+    console.log(session + " client server")
 
     return (
         <>

@@ -5,7 +5,7 @@ import { BalanceCard } from "../../components/BalanceCard"
 const page = () => {
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-            {'Fuck you'}
+            {'Go to transfer'}
         </div>
     )
 }

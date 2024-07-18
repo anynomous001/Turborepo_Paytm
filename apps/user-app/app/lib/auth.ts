@@ -1,11 +1,13 @@
-import PrismaClient from "@repo/db/client";
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcrypt'
+import client from "@repo/db/client"
 
 
-const client = new PrismaClient();
 
 console.log(process.env.JWT_SECRET)
+
+
+
 export const authOptions: any = {
     providers: [
         CredentialsProvider({
@@ -60,9 +62,9 @@ export const authOptions: any = {
         })
 
     ],
-    jwt: {
-        session: process.env.JWT_SECRET || 'secret',
-    },
+
+    secret: process.env.JWT_SECRET || 'secret',
+
     callbacks: {
         async session({ token, session }: any) {
             session.user.id = token.sub

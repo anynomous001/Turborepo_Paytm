@@ -47,7 +47,7 @@ const AddMoneyCard = () => {
                 <div className='flex justify-center'>
                     <Button onClick={async () => {
                         await createOnrampTransactions(amount, provider)
-                        window.location.href = redirectUrl || ""
+                        // window.location.href = redirectUrl || ""
                     }} >Add Money</Button>
                 </div>
             </Center>

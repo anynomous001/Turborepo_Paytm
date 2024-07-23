@@ -1,4 +1,3 @@
-import Center from "@repo/ui/Center"
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
 import OnRampTransactionCard from "../../components/onRampTransactionCard"
@@ -41,8 +40,6 @@ async function getOnrampTransactions() {
         amount: transaction.amount,
         status: transaction.status,
         provider: transaction.provider
-
-
     }))
 
 }

@@ -42,7 +42,6 @@ export default async function p2ptransaction(to: string, amount: number) {
                 message: "Insufficient Balance !!"
             }
         }
-        await new Promise(r => setTimeout(r, 4000));
         await tx.balance.update({
             where: {
                 userId: Number(from)
@@ -61,6 +60,14 @@ export default async function p2ptransaction(to: string, amount: number) {
             }
         })
 
+        await tx.p2pTransfer.create({
+            data: {
+                fromUserId: Number(from),
+                toUserId: Number(toUser.id),
+                amount,
+                timeStamp: new Date()
+            }
+        })
         console.log("Transfer Completed !!")
     })
 }

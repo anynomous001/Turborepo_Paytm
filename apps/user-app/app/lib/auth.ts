@@ -4,11 +4,10 @@ import client from "@repo/db/client"
 
 
 
-console.log(process.env.JWT_SECRET)
 
 
 
-export const authOptions: any = {
+export const authOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -67,7 +66,10 @@ export const authOptions: any = {
 
     callbacks: {
         async session({ token, session }: any) {
+            console.log(token)
+            console.log(session)
             session.user.id = token.sub
+            console.log(session)
             return session
         }
     }

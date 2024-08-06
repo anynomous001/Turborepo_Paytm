@@ -9,6 +9,11 @@ async function getp2pTransactionRecord() {
 
     const session = await getServerSession(authOptions)
 
+    if (!session || !session.user || !session.user.id) {
+        throw new Error("User ID is missing from session");
+    }
+
+
     const transactions = await prisma.p2pTransfer.findMany({
         where: {
             fromUserId: Number(session?.user?.id)
@@ -31,7 +36,6 @@ const page = async () => {
 
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-
             <SendMoney />
             <P2pTransactionsCard transactions={p2pTransactions} />
         </div>

@@ -1,6 +1,6 @@
 import express from "express"
 import db from "@repo/db/client"
-import { OnRampStatus } from '@prisma/client'
+
 
 const app = express()
 
@@ -37,7 +37,7 @@ app.post('/hdfcwebhook', async (req, res) => {
                 token: paymentInformation.token
             },
             data: {
-                status: OnRampStatus.Success
+                status: "Success"
             }
         })
 

@@ -3,7 +3,7 @@ import { Card } from "@repo/ui/card"
 interface onRampTransactionProps {
     time: Date,
     amount: number,
-    status: onRampStatus,
+    status: string,
     provider: string,
 }
 

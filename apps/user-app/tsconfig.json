@@ -5,10 +5,15 @@
       {
         "name": "next"
       }
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
     ]
   },
   "include": [
     "next-env.d.ts",
+    "next-auth.d.ts",
     "next.config.js",
     "**/*.ts",
     "**/*.tsx",

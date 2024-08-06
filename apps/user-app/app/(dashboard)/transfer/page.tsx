@@ -8,7 +8,7 @@ import prisma from "@repo/db/client"
 
 async function getBalance() {
     const session = await getServerSession(authOptions)
-    console.log("server session: ", session?.user);
+    // console.log("server session from transfer: ", session);
 
 
     if (!session?.user?.id) {

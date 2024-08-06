@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "../auth"
 import prisma from "@repo/db/client"
-import { OnRampStatus } from '@prisma/client';
+
 
 
 
@@ -18,7 +18,7 @@ export default async function createOnrampTransactions(amount: number, provider:
 
     await prisma.onRampTransaction.create({
         data: {
-            status: OnRampStatus.Processing,
+            status: "Processing",
             token: token,
             provider: provider,
             amount: amount * 100,

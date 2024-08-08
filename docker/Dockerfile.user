@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:current-alpine
 
 WORKDIR /usr/src/app
 
@@ -9,7 +9,7 @@ COPY packages ./packages
 
 
 RUN npm install
-RUN cd packages/db && npx prisma generate && ../..
+RUN cd packages/db && npx prisma generate && cd ../..
 
 RUN npm run build
 

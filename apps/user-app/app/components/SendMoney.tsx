@@ -13,8 +13,6 @@ const SendMoney = () => {
     return (
         <Card title="Send Money">
             <div className="p-4">
-
-
                 <div className="flex flex-col gap-4">
                     <Input label="Number" placeHolder="997-985-125"
                         onChange={(value) => {

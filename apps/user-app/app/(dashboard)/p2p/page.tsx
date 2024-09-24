@@ -9,9 +9,6 @@ async function getp2pTransactionRecord() {
 
     const session = await getServerSession(authOptions)
 
-
-
-
     if (!session || !session.user || !session.user.id) {
         throw new Error("User ID is missing from session");
     }

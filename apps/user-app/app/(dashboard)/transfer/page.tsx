@@ -10,7 +10,6 @@ async function getBalance() {
     const session = await getServerSession(authOptions)
     // console.log("server session from transfer: ", session);
 
-
     if (!session?.user?.id) {
         throw new Error("User ID is missing from session");
     }

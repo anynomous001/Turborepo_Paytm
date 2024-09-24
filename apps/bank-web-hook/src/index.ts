@@ -10,6 +10,7 @@ app.get('/', async (req, res) => {
     res.status(200).json('Hi there')
 })
 app.post('/hdfcwebhook', async (req, res) => {
+
     const paymentInformation: {
         token: string,
         userId: string,
@@ -20,40 +21,87 @@ app.post('/hdfcwebhook', async (req, res) => {
         amount: req.body.amount
     }
 
+
+
     try {
-        await db.balance.updateMany({
+
+        const account = await db.balance.findFirst({
             where: {
                 userId: Number(paymentInformation.userId)
-            },
-            data: {
-                amount: {
-                    increment: Number(paymentInformation.amount)
-                }
             }
         })
 
-        await db.onRampTransaction.updateMany({
-            where: {
-                token: paymentInformation.token
-            },
-            data: {
-                status: "Success"
-            }
+        let transactionOperations = [];
+        console.log(account)
+
+        if (account) {
+
+            transactionOperations = [
+                db.balance.updateMany({
+                    where: {
+                        userId: Number(paymentInformation.userId)
+                    },
+                    data: {
+                        amount: {
+                            // You can also get this from your DB
+                            increment: Number(paymentInformation.amount)
+                        }
+                    }
+                }),
+                db.onRampTransaction.updateMany({
+                    where: {
+                        token: paymentInformation.token
+                    },
+                    data: {
+                        status: "Success",
+                    }
+                })
+
+            ]
+
+
+        } else {
+
+            transactionOperations = [
+                db.balance.create({
+                    data: {
+                        userId: Number(paymentInformation.userId),
+                        amount: Number(paymentInformation.amount),
+                        locked: Number(0)
+
+                    }
+                }),
+                db.onRampTransaction.updateMany({
+                    where: {
+                        token: paymentInformation.token
+                    },
+                    data: {
+                        status: "Success",
+                    }
+                })
+
+            ]
+
+        }
+
+        const response = await db.$transaction(transactionOperations)
+
+        res.json({
+            message: "Captured",
+            response,
+            account
         })
 
-        res.status(200).json({
-            message: "Captured"
-        })
-
-    } catch (error) {
-        console.error(error)
+    } catch (e) {
+        console.error(e);
         res.status(411).json({
             message: "Error while processing webhook"
         })
-
-
     }
+
 })
+
+
 
 
 app.listen(3003, () => {

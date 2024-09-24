@@ -1,11 +1,8 @@
 'use server'
 
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
-
-
 
 export default async function p2ptransaction(to: string, amount: number) {
     const session = await getServerSession(authOptions)
@@ -29,6 +26,7 @@ export default async function p2ptransaction(to: string, amount: number) {
     }
 
     await prisma.$transaction(async (tx) => {
+
         const fromBalance = await tx.balance.findUnique({
             where: {
                 userId: Number(from)
@@ -42,15 +40,16 @@ export default async function p2ptransaction(to: string, amount: number) {
                 message: "Insufficient Balance !!"
             }
         }
+
         await tx.balance.update({
             where: {
                 userId: Number(from)
             },
             data: {
                 amount: { decrement: amount }
-            },
-
+            }
         })
+
         await tx.balance.update({
             where: {
                 userId: Number(toUser.id)

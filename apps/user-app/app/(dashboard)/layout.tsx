@@ -16,7 +16,6 @@ const layout = ({ children }: { children: JSX.Element }) => {
     )
 }
 
-
 export default layout
 
 function P2PTransferIcon() {

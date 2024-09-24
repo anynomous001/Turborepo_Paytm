@@ -3,10 +3,6 @@ import bcrypt from 'bcrypt'
 import client from "@repo/db/client"
 
 
-
-
-
-
 export const authOptions = {
     providers: [
         CredentialsProvider({
@@ -16,9 +12,6 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any) {
-
-                console.log(credentials)
-
 
                 const hashedPassword = await bcrypt.hash(credentials.password, 10)
                 const existingUser = await client.user.findFirst({
@@ -44,7 +37,7 @@ export const authOptions = {
                     const user = await client.user.create({
                         data: {
                             number: credentials.phone,
-                            password: hashedPassword
+                            password: credentials.password
                         }
                     })
                     return {
@@ -67,7 +60,6 @@ export const authOptions = {
     callbacks: {
         async session({ token, session }: any) {
             console.log(token)
-            console.log(session)
             session.user.id = token.sub
             console.log(session)
             return session

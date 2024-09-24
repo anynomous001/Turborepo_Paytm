@@ -11,6 +11,5 @@ export default async function page() {
     redirect('/dashboard')
   } else {
     redirect('/api/auth/signin')
-
   }
 }

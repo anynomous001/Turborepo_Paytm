@@ -8,7 +8,7 @@ export const authOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                phone: { label: "Phone Number", type: "text", placeholder: "123-456-789" },
+                number: { label: "Phone Number", type: "text", placeholder: "123-456-789" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any) {
@@ -16,7 +16,7 @@ export const authOptions = {
                 const hashedPassword = await bcrypt.hash(credentials.password, 10)
                 const existingUser = await client.user.findFirst({
                     where: {
-                        number: credentials.phone
+                        number: credentials.number
                     }
                 });
 
@@ -36,7 +36,7 @@ export const authOptions = {
                 try {
                     const user = await client.user.create({
                         data: {
-                            number: credentials.phone,
+                            number: credentials.number,
                             password: credentials.password
                         }
                     })
@@ -54,7 +54,10 @@ export const authOptions = {
         })
 
     ],
-
+    pages: {
+        signIn: "/auth/signin",  // Path to custom sign-in page
+        newUser: "/auth/signup", // New user sign-up page (optional)
+    },
     secret: process.env.JWT_SECRET || 'secret',
 
     callbacks: {

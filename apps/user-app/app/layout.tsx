@@ -21,7 +21,7 @@ export default function RootLayout({
       <Providers>
         <body className={''}>
           <div>
-            <AppbarClient />
+            {/* <AppbarClient /> */}
             {children}
           </div>
         </body>

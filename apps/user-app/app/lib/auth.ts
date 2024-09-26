@@ -5,6 +5,11 @@ import { signinInput } from '@repo/zod/zodTypes'
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 
+const publicRoutes = ["/auth/signin", "/auth/signup"]
+const authRoutes = ["/auth/signin", "/auth/signup"]
+
+
+
 export const authOptions = {
     providers: [
         Github,
@@ -110,11 +115,27 @@ export const authOptions = {
 
             const { pathname } = nextUrl
 
+
+            //Allow access to public routes to all users
+            if (publicRoutes.includes(pathname)) {
+                return true
+            }
+
+            //Re-direct logged-in users away from auth routes
+            if (authRoutes.includes(pathname)) {
+                if (isLoggedIn) {
+                    return Response.redirect(new URL('/dashboard', nextUrl))
+                }
+
+                return true // Allow access to auth routes if user is not logged in
+            }
+
+
             if (pathname.startsWith('/auth/signin') && isLoggedIn) {
                 return Response.redirect(new URL('/dashboard', nextUrl))
             }
 
-            return isLoggedIn; // Ensure it returns true for authorized routes
+            return isLoggedIn; // AAllow access if the user is authenticated
 
         }
     }

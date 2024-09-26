@@ -63,6 +63,7 @@ export const authOptions = {
 
                 user = {
                     id: '2',
+                    role: "admin",
                     name: "Pritam Chakroborty",
                     email: "chakrobortypritam1@gmail.com"
                 }
@@ -83,13 +84,27 @@ export const authOptions = {
     },
 
     callbacks: {
+        /*
+        You can update session data this way 
+        it can also be updated by catching trigger from jwt,
+        then from client component you can trigger update method and 
+        update the session data.
+        */
+        jwt({ token, user }: any) {
+            if (user) {
+                /*This is another way of updating session data. */
+                token.id = user.id as string
+                token.role = user.role as string
+            }
+            return token
+        },
         async session({ token, session }: any) {
             console.log('Token:', token);
             console.log('Session:', session);
-            session.user.id = token.sub;
+            session.user.id = token.id;
+            session.user.role = token.role
             return session;
-        }
-        ,
+        },
         authorized({ request: { nextUrl }, auth }: any) {
             const isLoggedIn = !!auth?.user
 

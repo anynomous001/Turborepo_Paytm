@@ -43,8 +43,6 @@ const signin = () => {
         } catch (error) {
             console.log("An unexpected error occurred. Please try again.");
         }
-
-
     }
 
     return (

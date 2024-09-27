@@ -16,46 +16,12 @@ export const authOptions = {
         Google,
         Credentials({
             credentials: {
-                number: { label: "Phone Number", type: "text", placeholder: "Phone Number" },
+                email: { label: "Email", type: "email", placeholder: "Email" },
                 password: { label: "Password", type: "password", placeholder: "Password" }
             },
             async authorize(credentials: any) {
 
-                // const hashedPassword = await bcrypt.hash(credentials.password, 10)
-                // const existingUser = await client.user.findFirst({
-                //     where: {
-                //         number: credentials.number
-                //     }
-                // });
 
-
-                // if (existingUser) {
-                //     const paswordValidation = await bcrypt.compare(credentials.password, existingUser.password)
-                //     if (paswordValidation) {
-                //         return {
-                //             id: existingUser.id.toString(),
-                //             name: existingUser.name,
-                //             email: existingUser.email
-                //         }
-                //     }
-                //     return null
-                // }
-
-                //     try {
-                //         const user = await client.user.create({
-                //             data: {
-                //                 number: credentials.number,
-                //                 password: credentials.password
-                //             }
-                //         })
-                //         return {
-                //             id: user.id.toString(),
-                //             name: user.name,
-                //             email: user.email
-                //         }
-                //     } catch (e) {
-                //         console.error(e);
-                //     }
                 const parsedCredentials = signinInput.safeParse(credentials)
                 if (!parsedCredentials.success) {
                     console.error("invalid credentials :", parsedCredentials.error.errors)

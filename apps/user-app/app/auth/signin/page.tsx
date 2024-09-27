@@ -25,9 +25,7 @@ const signin = () => {
     } = useForm<SigninInputType>({
         resolver: zodResolver(signinInput),
         defaultValues: {
-            number: "",
             password: "",
-            name: "",
             email: "",
         }
     })
@@ -55,24 +53,14 @@ const signin = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
                         {globalError && <ErrorMessage error={globalError} />}
-                        <Label htmlFor='name' className=''>
-                            Name
-                        </Label>
-                        <Input className='bg-white' placeholder='John Doe' type='text' id='name' {...register('name')} />
-                        {errors.name && <p className='text-red-500'>{errors.name?.message}</p>
-                        }
+
                         <Label htmlFor='password' className=''>
                             Password
                         </Label>
                         <Input className='bg-white' placeholder='******' type='password' id='password' {...register('password')} />
                         {errors.password && <p className='text-red-500'>{errors.password.message}</p>
                         }
-                        <Label htmlFor='number' className=''>
-                            Number
-                        </Label>
-                        <Input className='bg-white' placeholder='98743532' type='text' id='number' {...register('number')} />
-                        {errors.number && <p className='text-red-500'>{errors.number.message}</p>
-                        }
+
                         <Label htmlFor='email' className=''>
                             Email
                         </Label>

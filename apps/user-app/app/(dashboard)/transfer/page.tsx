@@ -10,7 +10,6 @@ async function getBalance() {
     const session = await auth()
 
 
-
     if (!session?.user?.id) {
         throw new Error("User ID is missing from session");
     }

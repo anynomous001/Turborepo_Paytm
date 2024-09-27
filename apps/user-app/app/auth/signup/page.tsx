@@ -9,12 +9,18 @@ import { Input } from '@/components/ui/input'
 import React from 'react'
 import ErrorMessage from '@/app/components/error-message'
 import LoadingButton from '@/app/components/loading-button'
-import { handleCredentialsSignin, handleGithubSignin, handleGoogleSignin } from '@/app/lib/actions/authActions'
+import { handleCredentialsSignin, handleCredentialsSignup, handleGithubSignin, handleGoogleSignin } from '@/app/lib/actions/authActions'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
+import { ServerActionResponse } from '@/types/actions';
+
 
 const signup = () => {
 
+    interface ValuesForSignIn {
+        email: string,
+        password: string
+    }
     const [globalError, setGlobalError] = React.useState<string>("")
 
     const {
@@ -35,13 +41,20 @@ const signup = () => {
     const onSubmit = async (data: SignupInputType) => {
         try {
 
-            const result = await handleCredentialsSignin(data)
-            if (result?.message) {
+            const result: ServerActionResponse = await handleCredentialsSignup(data)
+            if (result.success) {
+                console.log("Account has created successfully.")
+
+                const valuesForSignin = {
+                    email: data.email,
+                    password: data.password,
+                }
+                await handleCredentialsSignin(valuesForSignin)
+            } else {
                 setGlobalError(result.message);
             }
-
         } catch (error) {
-            console.log("An unexpected error occurred. Please try again.");
+            setGlobalError("An unexpected error occurred. Please try again.");
         }
     }
 

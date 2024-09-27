@@ -4,7 +4,7 @@ import { signIn, signOut } from "@/app/api/auth/[...nextauth]/route"
 import { signupInput, SignupInputType } from "@repo/zod/zodTypes"
 import client from '@repo/db/client'
 import { AuthError } from "next-auth"
-import bcrypt from "bcrypt"
+import bcryptjs from "bcryptjs"
 
 
 
@@ -26,7 +26,7 @@ export async function handleCredentialsSignup({ email, password, number, name }:
             return { success: false, message: "Email already exists. Login to continue." };
 
         }
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const hashedPassword = await bcryptjs.hash(password, 10)
 
         await client.user.create({
             data: {

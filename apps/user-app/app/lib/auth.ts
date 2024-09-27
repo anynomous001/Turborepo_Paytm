@@ -1,5 +1,5 @@
 import Credentials from 'next-auth/providers/credentials'
-import bcrypt from 'bcrypt'
+import bcryptjs from 'bcryptjs'
 import client from "@repo/db/client"
 import { signinInput } from '@repo/zod/zodTypes'
 import Github from "next-auth/providers/github"
@@ -21,31 +21,39 @@ export const authOptions = {
             },
             async authorize(credentials: any) {
 
-
                 const parsedCredentials = signinInput.safeParse(credentials)
                 if (!parsedCredentials.success) {
                     console.error("invalid credentials :", parsedCredentials.error.errors)
 
                     return null
                 }
-
-
-                let user = null
-
-                user = {
-                    id: '2',
-                    role: "admin",
-                    name: "Pritam Chakroborty",
-                    email: "chakrobortypritam1@gmail.com"
-                }
+                const user = await client.user.findUnique({
+                    where: {
+                        email: credentials.email
+                    }
+                })
 
                 if (!user) {
-                    return null
+                    console.log("Invalid credentials");
+                    return null;
                 }
 
-                return user
-            }
+                if (!user.password) {
+                    console.log("User does not have password,may have auhtorized with any Oauth app.")
+                    return null;
+                }
 
+                const isPasswordValid = await bcryptjs.compare(credentials.password as string, user.password)
+
+                if (!isPasswordValid) {
+                    console.log("Invalid password");
+                    return null;
+                }
+
+                const { password, ...userWithoutPassword } = user;
+                return userWithoutPassword;
+
+            }
         })
 
     ],

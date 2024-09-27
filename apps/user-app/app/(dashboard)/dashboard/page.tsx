@@ -1,14 +1,20 @@
+'use client'
+
 import Center from "@repo/ui/Center"
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
+import { useSession } from "next-auth/react"
 
 
 
 
 const page = () => {
+
+    const { data: session, update } = useSession();
+
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-            {'Go to transfer'}
+            {`Go to transfer`}{session?.user.name}
         </div>
     )
 }

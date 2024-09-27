@@ -1,15 +1,6 @@
 import z from 'zod'
 
 export const signupInput = z.object({
-    name: z.string().optional(),
-    email: z.string().email(),
-    password: z.string().min(5, "Password must be at least 5 chararters long"),
-    number: z.string().min(10, "Number must be at least 10 chararters long")
-})
-
-export type SignupInputType = z.infer<typeof signupInput>
-
-export const signinInput = z.object({
     name: z.string({ required_error: "Name is required" })
         .min(1, "Name is required"),
 
@@ -27,4 +18,21 @@ export const signinInput = z.object({
         .max(10, "Number should not exceed 10 chararters")
 })
 
-export type SigninInputType = z.infer<typeof signupInput>
+export type SignupInputType = z.infer<typeof signupInput>
+
+
+
+
+
+export const signinInput = z.object({
+
+    email: z.string({ required_error: "Email is required" })
+        .min(1, "Email is required")
+        .email("Invalid Email"),
+
+    password: z.string({ required_error: "Number is required" })
+        .min(1, "Password is required")
+        .min(5, "Password must be at least 5 chararters long")
+})
+
+export type SigninInputType = z.infer<typeof signinInput>

@@ -1,13 +1,12 @@
 import prisma from "@repo/db/client"
 import SendMoney from "../../components/SendMoney"
-import { getServerSession } from "next-auth"
-import { authOptions } from "../../lib/auth"
 import P2pTransactionsCard from "../../components/p2pTransactionCard"
+import { auth } from "@/app/api/auth/[...nextauth]/route"
 
 
 async function getp2pTransactionRecord() {
 
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session || !session.user || !session.user.id) {
         throw new Error("User ID is missing from session");

@@ -1,14 +1,15 @@
+import { auth } from "@/app/api/auth/[...nextauth]/route"
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
 import OnRampTransactionCard from "../../components/onRampTransactionCard"
-import { getServerSession } from "next-auth"
 import { authOptions } from "../../lib/auth"
 import prisma from "@repo/db/client"
 
 
 async function getBalance() {
-    const session = await getServerSession(authOptions)
-    // console.log("server session from transfer: ", session);
+    const session = await auth()
+
+
 
     if (!session?.user?.id) {
         throw new Error("User ID is missing from session");
@@ -26,7 +27,7 @@ async function getBalance() {
 }
 
 async function getOnrampTransactions() {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     const transactions = await prisma.onRampTransaction.findMany({
         where: {

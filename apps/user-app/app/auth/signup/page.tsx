@@ -62,7 +62,7 @@ const signup = () => {
         <div className='w-full h-[100vh] flex justify-center items-center'>
             <div className='w-80 shadow-lg bg-slate-100 p-8 rounded-md'>
                 <div className='text-center'>
-                    <h1 className='mb-2 text-2xl text-gray-950 font-semibold'>Medium</h1>
+                    <h1 className='mb-2 text-2xl text-gray-950 font-semibold'>Create your account.</h1>
                 </div>
                 <div className='mt-2'>
 

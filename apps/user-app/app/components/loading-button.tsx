@@ -8,7 +8,7 @@ const LoadingButton = ({ pending, children }: { pending: boolean, children: Reac
             {
                 pending ? (
                     <div className="flex items-center justify-center">
-                        Signing In ...
+                        Processing....
                     </div>
                 ) : (
                     <div>

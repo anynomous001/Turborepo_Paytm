@@ -12,10 +12,33 @@ import LoadingButton from '@/app/components/loading-button'
 import { handleCredentialsSignin, handleGithubSignin, handleGoogleSignin } from '@/app/lib/actions/authActions'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation';
+
 
 const signin = () => {
 
-    const [globalError, setGlobalError] = React.useState<string>("")
+    const params = useSearchParams();
+    const error = params.get("error");
+    const router = useRouter();
+
+    const [globalError, setGlobalError] = React.useState<string>("");
+
+    React.useEffect(() => {
+        if (error) {
+            switch (error) {
+                case "OAuthAccountNotLinked":
+                    setGlobalError(
+                        "Please use your email and password to sign in."
+                    );
+                    break;
+                default:
+                    setGlobalError(
+                        "An unexpected error occurred. Please try again."
+                    );
+            }
+        }
+        router.replace("/auth/signin");
+    }, [error, router]);
 
     const {
         handleSubmit,

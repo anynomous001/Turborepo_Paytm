@@ -1,10 +1,10 @@
 "use server"
 
-import { signIn, signOut } from "@/app/api/auth/[...nextauth]/route"
-import { signupInput, SignupInputType } from "@repo/zod/zodTypes"
+import { SigninInputType, signupInput, SignupInputType } from "@repo/zod/zodTypes"
 import client from '@repo/db/client'
 import { AuthError } from "next-auth"
 import bcryptjs from "bcryptjs"
+import { signIn, signOut } from "../auth"
 
 
 
@@ -51,7 +51,7 @@ export async function handleCredentialsSignup({ email, password, number, name }:
 
 
 
-export async function handleCredentialsSignin({ email, password }: SignupInputType) {
+export async function handleCredentialsSignin({ email, password }: SigninInputType) {
     try {
         await signIn("credentials", { email, password, redirectTo: '/dashboard' })
     } catch (error) {

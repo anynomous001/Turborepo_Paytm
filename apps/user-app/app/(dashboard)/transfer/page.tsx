@@ -1,8 +1,7 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route"
+import { auth } from "@/app/lib/auth"
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
 import OnRampTransactionCard from "../../components/onRampTransactionCard"
-import { authOptions } from "../../lib/auth"
 import prisma from "@repo/db/client"
 
 

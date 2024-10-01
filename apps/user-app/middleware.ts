@@ -1,5 +1,11 @@
-export { auth as middleware } from '@/app/api/auth/[...nextauth]/route'
+import NextAuth from "next-auth"
+
+import authConfig from "./app/lib/auth.config"
+
+
+
+export const { auth: middleware } = NextAuth(authConfig);
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"]
-}
+    matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+};

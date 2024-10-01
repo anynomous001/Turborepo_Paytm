@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/lib/auth"
 import { Button } from "@/components/ui/button";
 import { handleSignOut } from "../lib/actions/authActions";
 

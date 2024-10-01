@@ -1,7 +1,7 @@
 import prisma from "@repo/db/client"
 import SendMoney from "../../components/SendMoney"
 import P2pTransactionsCard from "../../components/p2pTransactionCard"
-import { auth } from "@/app/api/auth/[...nextauth]/route"
+import { auth } from "@/app/lib/auth"
 
 
 async function getp2pTransactionRecord() {

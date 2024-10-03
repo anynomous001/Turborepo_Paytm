@@ -1,7 +1,14 @@
 import { atom } from "recoil"
 
+interface BalanceState {
+    amount: number,
+    locked: number
+}
 
-export const balanceAtom = atom<number>({
+export const balanceAtom = atom<BalanceState>({
     key: "balance",
-    default: 0,
+    default: {
+        amount: 0,
+        locked: 0
+    }
 })

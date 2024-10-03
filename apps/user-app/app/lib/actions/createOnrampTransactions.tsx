@@ -16,9 +16,9 @@ export default async function createOnrampTransactions(amount: number, provider:
         }
     }
 
-    await prisma.onRampTransaction.create({
+    const transaction = await prisma.onRampTransaction.create({
         data: {
-            status: "Success",
+            status: "Processing",
             token: token,
             provider: provider,
             amount: amount * 100,
@@ -27,6 +27,7 @@ export default async function createOnrampTransactions(amount: number, provider:
         }
     })
     return {
-        message: "Done"
+        // message: "Done",
+        transaction
     }
 }

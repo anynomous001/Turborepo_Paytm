@@ -1,32 +1,17 @@
-import { auth } from "@/app/lib/auth"
+
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
 import OnRampTransactionCard from "../../components/onRampTransactionCard"
 import prisma from "@repo/db/client"
+import { auth } from "@/app/lib/auth"
+import { useRecoilState } from "recoil"
+import { balanceAtom } from "@repo/store/balanceAtom"
 
 
-async function getBalance() {
-    const session = await auth()
 
-
-    if (!session?.user?.id) {
-        throw new Error("User ID is missing from session");
-    }
-
-    const balance = await prisma.balance.findFirst({
-        where: {
-            userId: Number(session?.user?.id)
-        },
-    })
-    return {
-        amount: balance?.amount || 0,
-        locked: balance?.locked || 0
-    }
-}
 
 async function getOnrampTransactions() {
     const session = await auth()
-
     const transactions = await prisma.onRampTransaction.findMany({
         where: {
             userId: Number(session?.user?.id)
@@ -43,17 +28,41 @@ async function getOnrampTransactions() {
 }
 
 
-const page = async () => {
 
-    const balance = await getBalance()
+
+
+const page = async () => {
     const transactions = await getOnrampTransactions()
+
+    async function getBalance() {
+        const session = await auth()
+
+        if (session?.user?.id) {
+            throw new Error("User ID is missing from session");
+        }
+
+
+        const balance = await prisma.balance.findFirst({
+            where: {
+                userId: Number(session?.user?.id)
+            },
+        })
+
+        return {
+            amount: balance?.amount || 0,
+            locked: balance?.locked || 0,
+
+        }
+
+    }
+
 
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
             <AddMoneyCard />
             <div className="flex flex-col">
 
-                <BalanceCard amount={balance.amount} locked={balance.locked} />
+                <BalanceCard />
                 <OnRampTransactionCard transactions={transactions} />
             </div>
         </div>

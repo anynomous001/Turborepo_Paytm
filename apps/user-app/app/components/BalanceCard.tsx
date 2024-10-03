@@ -1,9 +1,20 @@
-import { Card } from "@repo/ui/card";
+'use client'
 
-export const BalanceCard = ({ amount, locked }: {
-    amount: number;
-    locked: number;
-}) => {
+import { Card } from "@repo/ui/card";
+import prisma from "@repo/db/client"
+import React from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { balanceAtom } from "@repo/store/balanceAtom";
+
+
+
+export const BalanceCard = () => {
+
+    const totalBalance = useRecoilValue(balanceAtom);
+
+
+
+
     return <Card title={"Balance"}>
         <div className="flex flex-col gap-2 p-4">
             <div className="flex justify-between border-b border-slate-300 pb-2">
@@ -11,7 +22,7 @@ export const BalanceCard = ({ amount, locked }: {
                     Unlocked balance
                 </div>
                 <div>
-                    {amount / 100} INR
+                    {totalBalance.amount / 100} INR
                 </div>
             </div>
             <div className="flex justify-between border-b border-slate-300 py-2">
@@ -19,7 +30,7 @@ export const BalanceCard = ({ amount, locked }: {
                     Total Locked Balance
                 </div>
                 <div>
-                    {locked / 100} INR
+                    {totalBalance.locked / 100} INR
                 </div>
             </div>
             <div className="flex justify-between border-b border-slate-300 py-2">
@@ -27,7 +38,7 @@ export const BalanceCard = ({ amount, locked }: {
                     Total Balance
                 </div>
                 <div>
-                    {(locked + amount) / 100} INR
+                    {(totalBalance.locked + totalBalance.amount) / 100} INR
                 </div>
             </div>
         </div>

@@ -7,9 +7,9 @@ import Google from "next-auth/providers/google"
 
 import { NextAuthConfig } from 'next-auth'
 
+
 const publicRoutes = ["/auth/signin", "/auth/signup"]
 const authRoutes = ["/auth/signin", "/auth/signup"]
-
 
 
 
@@ -81,24 +81,19 @@ export default {
             return token
         },
         async session({ token, session }: any) {
-            console.log('Token:', token);
-            console.log('Session:', session);
             session.user.id = token.id;
             session.user.role = token.role
             return session;
         },
         authorized({ request: { nextUrl }, auth }: any) {
-            const isLoggedIn = !!auth?.user
 
+            const isLoggedIn = !!auth?.user
             const { pathname } = nextUrl
 
-
-            //Allow access to public routes to all users
             if (publicRoutes.includes(pathname)) {
                 return true
             }
 
-            //Re-direct logged-in users away from auth routes
             if (authRoutes.includes(pathname)) {
                 if (isLoggedIn) {
                     return Response.redirect(new URL('/dashboard', nextUrl))

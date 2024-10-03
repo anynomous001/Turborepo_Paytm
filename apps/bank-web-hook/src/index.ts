@@ -1,8 +1,18 @@
 import express from "express"
 import db from "@repo/db/client"
+import cors from 'cors';
+
 
 
 const app = express()
+
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+
+
 
 app.use(express.json())
 
@@ -18,7 +28,7 @@ app.post('/hdfcwebhook', async (req, res) => {
         amount: string
     } = {
         token: req.body.token,
-        userId: req.body.user_indentifier,
+        userId: req.body.id,
         amount: req.body.amount
     }
 
@@ -90,7 +100,7 @@ app.post('/hdfcwebhook', async (req, res) => {
         res.json({
             message: "Captured",
             response,
-            account
+
         })
 
     } catch (e) {

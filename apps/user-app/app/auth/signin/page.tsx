@@ -43,7 +43,6 @@ const signin = () => {
     const {
         handleSubmit,
         register,
-        setError,
         formState: { errors, isSubmitting }
     } = useForm<SigninInputType>({
         resolver: zodResolver(signinInput),

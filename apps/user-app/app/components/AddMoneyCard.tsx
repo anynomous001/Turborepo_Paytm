@@ -27,9 +27,8 @@ const SUPPORTED_BANKS = [{
 const AddMoneyCard = ({ amount, locked }: BalanceState) => {
     const [redirectUrl, setRedirectUrl] = React.useState(SUPPORTED_BANKS[0]?.name)
     const [provider, setProvider] = React.useState(SUPPORTED_BANKS[0]?.name || "")
-    const [balanceInfo, setBalanceInfo] = useRecoilState(balanceAtom)
+    const setBalanceInfo = useSetRecoilState(balanceAtom)
     const [addAmount, setAddAmount] = React.useState(0)
-    const [loading, setLoading] = useRecoilState(loadingAtom)
     const setTransactionInfo = useSetRecoilState(transactionAtom)
 
 
@@ -80,8 +79,8 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
         // setTransactionInfo(transactions)
         setTransactionInfo((prevTransactionState) => ({
             transactions: [
-                ...prevTransactionState.transactions,  // Keep previous transactions
-                transactions                         // Add the new transaction
+                ...prevTransactionState.transactions,
+                transactions
             ]
         }));
 

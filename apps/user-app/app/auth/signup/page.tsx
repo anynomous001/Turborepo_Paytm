@@ -17,16 +17,15 @@ import { ServerActionResponse } from '@/types/actions';
 
 const signup = () => {
 
-    interface ValuesForSignIn {
-        email: string,
-        password: string
-    }
+    // interface ValuesForSignIn {
+    //     email: string,
+    //     password: string
+    // }
     const [globalError, setGlobalError] = React.useState<string>("")
 
     const {
         handleSubmit,
         register,
-        setError,
         formState: { errors, isSubmitting }
     } = useForm<SignupInputType>({
         resolver: zodResolver(signupInput),

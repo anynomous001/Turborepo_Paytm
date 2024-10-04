@@ -67,13 +67,13 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
 
         console.log(transaction)
 
-        const transactions = [{
+        const transactions = {
             time: transaction?.startTime,
             amount: transaction?.amount,
             status: transaction?.status,
             provider: transaction?.provider
 
-        }]
+        }
 
         console.log(transactions)
 

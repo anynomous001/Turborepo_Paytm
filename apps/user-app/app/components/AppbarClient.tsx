@@ -8,7 +8,7 @@ import { handleSignOut } from "../lib/actions/authActions";
 export default async function AppbarClient() {
 
     const session = await auth();
-
+    console.log(session)
     return (
         <div className="flex justify-between border-b px-4 py-4">
             <div className="text-lg flex flex-col justify-center">

@@ -7,11 +7,12 @@ import Input from "@repo/ui/Input";
 import Select from '@repo/ui/Select'
 import React from 'react'
 import createOnrampTransactions from '../lib/actions/createOnrampTransactions';
-import { useRecoilState } from 'recoil';
-import { balanceAtom } from '@repo/store/balanceAtom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { balanceAtom, BalanceState, loadingAtom } from '@repo/store/balanceAtom';
 import axios from 'axios'
 import prisma from '@repo/db/client';
 import { useSession } from 'next-auth/react';
+import { transactionAtom } from '@repo/store/transactionAtom';
 
 
 const SUPPORTED_BANKS = [{
@@ -23,12 +24,24 @@ const SUPPORTED_BANKS = [{
 }];
 
 
-const AddMoneyCard = () => {
+const AddMoneyCard = ({ amount, locked }: BalanceState) => {
     const [redirectUrl, setRedirectUrl] = React.useState(SUPPORTED_BANKS[0]?.name)
     const [provider, setProvider] = React.useState(SUPPORTED_BANKS[0]?.name || "")
-    const [balance, setBalance] = useRecoilState(balanceAtom)
-    const [amount, setAmount] = React.useState(0)
+    const [balanceInfo, setBalanceInfo] = useRecoilState(balanceAtom)
+    const [addAmount, setAddAmount] = React.useState(0)
+    const [loading, setLoading] = useRecoilState(loadingAtom)
+    const setTransactionInfo = useSetRecoilState(transactionAtom)
 
+
+    React.useEffect(() => {
+
+        setBalanceInfo(() => ({
+            amount: amount,
+            locked: locked
+        }))
+
+
+    }, [])
 
 
     async function triggerWebHook(token: string, amount: string, id: string) {
@@ -47,30 +60,54 @@ const AddMoneyCard = () => {
         }
     }
 
-
-
     const handleAddMoney = async () => {
         console.log('handle add money clicked')
 
-        const { transaction } = await createOnrampTransactions(amount, provider)
+        const { transaction } = await createOnrampTransactions(addAmount, provider)
 
         console.log(transaction)
+
+        const transactions = [{
+            time: transaction?.startTime,
+            amount: transaction?.amount,
+            status: transaction?.status,
+            provider: transaction?.provider
+
+        }]
+
+        console.log(transactions)
+
+        // setTransactionInfo(transactions)
+        setTransactionInfo((prevTransactionState) => ({
+            transactions: [
+                ...prevTransactionState.transactions,  // Keep previous transactions
+                transactions                         // Add the new transaction
+            ]
+        }));
+
         const response = await triggerWebHook(String(transaction?.token), String(transaction?.amount), String(transaction?.userId))
         console.log(response)
 
-        setBalance(() => ({
+        setBalanceInfo(() => ({
             amount: response.account.amount,
             locked: response.account.amount,
         }))
+
+
+
+
     }
+
+
+
+
 
     return (
         <Card title='Add Money'>
-
             <Center>
                 <div className={'flex flex-col gap-6'}>
                     <Input placeHolder='Enter Amount' onChange={(value) => {
-                        setAmount(Number(value))
+                        setAddAmount(Number(value))
                     }} label='Amount' />
 
                     <Select onSelect={(value) => {

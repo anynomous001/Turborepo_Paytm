@@ -1,28 +1,25 @@
+'use client'
+
 import { Card } from "@repo/ui/card"
+import { OnRampTransactionProps, transactionAtom, TransactionState } from "@repo/store/transactionAtom"
+import { useRecoilState, useRecoilValue } from "recoil"
+import React from "react"
 
-interface onRampTransactionProps {
-    time: Date,
-    amount: number,
-    status: string,
-    provider: string,
-}
 
-interface Props {
-    transactions: onRampTransactionProps[]
-}
-
-enum onRampStatus {
-    Success,
-    Failure,
-    Processing
+interface OnRampTransactionCardProps {
+    transactions: OnRampTransactionProps[];
 }
 
 
+const OnRampTransactionCard = ({ transactions }: OnRampTransactionCardProps) => {
+    console.log(transactions)
+    const [transactionInfo, setTransactionInfo] = useRecoilState(transactionAtom)
 
-const OnRampTransactionCard: React.FC<Props> = ({ transactions }) => {
+    React.useEffect(() => {
+        setTransactionInfo({ transactions })
+    }, [transactions])
 
-
-    if (!transactions?.length) {
+    if (!transactionInfo?.transactions.length) {
         return <Card title="Recent Transactions">
             <div className="text-center pb-8 pt-8">
                 No Recent transactions
@@ -32,7 +29,7 @@ const OnRampTransactionCard: React.FC<Props> = ({ transactions }) => {
 
     return <Card title="Recent Transactions">
         <div className="pt-2">
-            {transactions?.map(t => <div className="flex justify-between p-4">
+            {transactionInfo?.transactions.map(t => <div key={Math.random()} className="flex justify-between p-4">
                 <div className="">
                     <div className="text-sm">
                         Received INR

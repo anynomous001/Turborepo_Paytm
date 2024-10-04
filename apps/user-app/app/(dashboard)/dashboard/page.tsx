@@ -12,11 +12,7 @@ const page = () => {
 
     const { data: session, update } = useSession();
 
-    return (
-        <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-            {`Go to transfer`}{session?.user.name}
-        </div>
-    )
+    return <div>{session?.user?.name}</div>
 }
 
 export default page

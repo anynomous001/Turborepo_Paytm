@@ -88,8 +88,8 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
         console.log(response)
 
         setBalanceInfo(() => ({
-            amount: response.account.amount,
-            locked: response.account.amount,
+            amount: response.accountBalance.amount,
+            locked: response.accountBalance.amount,
         }))
 
 

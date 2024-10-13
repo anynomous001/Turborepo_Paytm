@@ -43,7 +43,6 @@ app.post('/hdfcwebhook', async (req, res) => {
         })
 
         let transactionOperations = [];
-        console.log(account)
 
         if (account) {
 
@@ -97,9 +96,16 @@ app.post('/hdfcwebhook', async (req, res) => {
 
         const response = await db.$transaction(transactionOperations)
 
+
+        const accountBalance = await db.balance.findFirst({
+            where: {
+                userId: Number(paymentInformation.userId)
+            }
+        })
         res.json({
-            message: "Captured",
+            message: "Captured2",
             response,
+            accountBalance
 
         })
 

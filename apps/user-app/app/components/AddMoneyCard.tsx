@@ -91,15 +91,7 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
             amount: response.accountBalance.amount,
             locked: response.accountBalance.amount,
         }))
-
-
-
-
     }
-
-
-
-
 
     return (
         <Card title='Add Money'>

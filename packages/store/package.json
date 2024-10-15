@@ -16,6 +16,7 @@
     "./useBalance": "./src/hooks/useBalance.ts",
     "./useSetBalance": "./src/hooks/useBalance.ts",
     "./balanceAtom": "./src/atoms/balance.ts",
-    "./transactionAtom": "./src/atoms/transaction.ts"
+    "./transactionAtom": "./src/atoms/transaction.ts",
+    "./p2pTransactionsAtom": "./src/atoms/p2ptransaction.ts"
   }
 }

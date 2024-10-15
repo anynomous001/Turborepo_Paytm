@@ -33,10 +33,12 @@ const page = async () => {
 
     const p2pTransactions = await getp2pTransactionRecord()
 
+
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
             <SendMoney />
             <P2pTransactionsCard transactions={p2pTransactions} />
+
         </div>
     )
 }

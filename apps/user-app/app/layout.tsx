@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "../provider";
 import AppbarClient from "./components/AppbarClient"
+import { Toaster } from "@/components/ui/toaster";
 
 
 
@@ -24,6 +25,7 @@ export default function RootLayout({
             <AppbarClient />
             {children}
           </div>
+          <Toaster />
         </body>
       </Providers>
     </html>

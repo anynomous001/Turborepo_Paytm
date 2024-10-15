@@ -1,21 +1,34 @@
+'use client'
+
+
 import { Card } from "@repo/ui/card"
+import { p2pTransactionsAtom, P2pTransactionsProps, P2pTransactionState } from "@repo/store/p2pTransactionsAtom"
+import { useRecoilState, useSetRecoilState } from "recoil"
+import React from "react"
+import cn from 'classnames'
+import { useSession } from "next-auth/react"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 
-interface p2pTransactionsProps {
-    time: Date,
-    amount: number,
-    fromUser: number,
-    toUser: number
-}
+// export interface p2pTransactionsCardProps {
+//     transactions: P2pTransactionsProps[]
+// }
 
 
-interface Props {
-    transactions: p2pTransactionsProps[]
-}
+const P2pTransactionsCard = ({ transactions }: P2pTransactionState, { id }: { id: string }) => {
 
-const P2pTransactionsCard: React.FC<Props> = ({ transactions }) => {
+    const [p2pTransactionInfo, setP2pTransactionInfo] = useRecoilState(p2pTransactionsAtom)
+    const { data: session } = useSession()
 
-    if (!transactions?.length) {
+    console.log(session?.user?.id)
+
+
+    React.useEffect(() => {
+        setP2pTransactionInfo({ transactions })
+    }, [transactions])
+
+
+    if (!p2pTransactionInfo?.transactions.length) {
         return <Card title="Recent Transactions">
             <div className="text-center pb-8 pt-8">
                 No Recent transactions
@@ -23,24 +36,47 @@ const P2pTransactionsCard: React.FC<Props> = ({ transactions }) => {
         </Card>
     }
 
-    return <Card title="Recent Transactions">
-        <div className="pt-2">
-            {transactions?.map(t => <div className="flex justify-between p-4">
-                <div className="">
-                    <div className="text-sm">
-                        Received INR
-                    </div>
-                    <div className="text-slate-600 text-xs">
-                        {t.time.toDateString()}
-                    </div>
-                </div>
-                <div className="flex flex-col justify-center">
-                    + Rs {t.amount / 100}
-                </div>
 
-            </div>)}
-        </div>
-    </Card>
+    console.log(id + ' from p2ptransaction ')
+
+    return <ScrollArea className="h-[60vh]  w-[30vw]" >
+        <Card title="Recent Transactions">
+            <div className="pt-2">
+                {p2pTransactionInfo?.transactions.map(t => <div className="flex justify-between p-4">
+                    <div className="">
+                        <div className={cn("text-xl opacity-90 font-medium",
+                            String(session?.user?.id) === String(t.toUser) ? 'text-green-500' : 'text-red-400'
+                        )}>
+                            {
+                                String(session?.user?.id) === String(t.toUser)
+                                    ? `Received INR`
+                                    : `Paid INR`
+                            }                        </div>
+                        <div className="text-slate-600 text-sm">
+                            {t.time.toDateString()}
+                        </div>
+                    </div>
+                    <div className={cn(
+                        'flex flex-col justify-center',
+                        String(session?.user?.id) === String(t.toUser) ? 'text-green-500' : 'text-red-400'
+                    )}>
+                        {
+                            String(session?.user?.id) === String(t.toUser)
+                                ? `+ Rs ${t.amount / 100}`
+                                : `- Rs ${t.amount / 100}`
+                        }
+
+                    </div>
+
+
+                </div>)}
+            </div>
+        </Card >
+
+
+    </ScrollArea>
+
+
 }
 
 export default P2pTransactionsCard

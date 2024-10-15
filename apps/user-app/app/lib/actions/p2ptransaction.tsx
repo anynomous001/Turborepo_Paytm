@@ -4,70 +4,83 @@ import prisma from "@repo/db/client";
 import { auth } from "../auth";
 
 
-export default async function p2ptransaction(to: string, amount: number) {
+export default async function p2ptransaction(email: string, amount: number) {
     const session = await auth();
-
     const from = session?.user?.id
+
     if (!from) {
         return {
-            message: "An Error occured while sending ..!"
+            error: "An Error occured while sending ..!"
         }
     }
+    try {
 
-    const toUser = await prisma.user.findFirst({
-        where: {
-            number: to
-        }
-    })
 
-    if (!toUser) {
-        return {
-            message: "User doesn't exist."
-        }
-    }
-
-    await prisma.$transaction(async (tx) => {
-
-        const fromBalance = await tx.balance.findUnique({
+        const toUser = await prisma.user.findFirst({
             where: {
-                userId: Number(from)
+                email: email
             }
         })
 
-
-
-        if (!fromBalance || fromBalance.amount < amount) {
+        if (!toUser) {
             return {
-                message: "Insufficient Balance !!"
+                error: "User doesn't exist !"
             }
         }
 
-        await tx.balance.update({
-            where: {
-                userId: Number(from)
-            },
-            data: {
-                amount: { decrement: amount }
+        let response = null
+        await prisma.$transaction(async (tx) => {
+
+            const fromBalance = await tx.balance.findUnique({
+                where: {
+                    userId: Number(from)
+                }
+            })
+
+
+
+            if (!fromBalance || fromBalance.amount < amount) {
+                throw new Error("Insufficient Balance!!");
             }
+
+            await tx.balance.update({
+                where: {
+                    userId: Number(from)
+                },
+                data: {
+                    amount: { decrement: amount }
+                }
+            })
+
+            await tx.balance.update({
+                where: {
+                    userId: Number(toUser.id)
+                },
+                data: {
+                    amount: { increment: amount }
+                }
+            })
+
+            response = await tx.p2pTransfer.create({
+                data: {
+                    fromUserId: Number(from),
+                    toUserId: Number(toUser.id),
+                    amount,
+                    timeStamp: new Date()
+                }
+            })
         })
 
-        await tx.balance.update({
-            where: {
-                userId: Number(toUser.id)
-            },
-            data: {
-                amount: { increment: amount }
-            }
-        })
+        return {
+            message: "Transfer Completed !!",
+            response
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            error: error.message || "An error occurred during the transfer."
+        }
+    }
 
-        await tx.p2pTransfer.create({
-            data: {
-                fromUserId: Number(from),
-                toUserId: Number(toUser.id),
-                amount,
-                timeStamp: new Date()
-            }
-        })
-        console.log("Transfer Completed !!")
-    })
+
 }

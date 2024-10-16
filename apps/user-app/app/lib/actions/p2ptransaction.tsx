@@ -22,6 +22,12 @@ export default async function p2ptransaction(email: string, amount: number) {
             }
         })
 
+        if (toUser?.id === Number(from)) {
+            return {
+                error: "Enter valid user details !"
+            }
+        }
+
         if (!toUser) {
             return {
                 error: "User doesn't exist !"

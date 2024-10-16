@@ -25,7 +25,7 @@ async function getOnrampTransactions() {
 
 }
 
-async function getBalance() {
+export async function getBalance() {
     const session = await auth()
 
 

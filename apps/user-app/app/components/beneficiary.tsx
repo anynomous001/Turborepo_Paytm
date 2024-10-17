@@ -5,6 +5,7 @@ import {
     DialogContent,
     DialogDescription,
     DialogFooter,
+    DialogClose,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -17,6 +18,7 @@ import React from "react"
 import { useRecoilState, useSetRecoilState } from "recoil"
 import p2ptransaction from "../lib/actions/p2ptransaction"
 import { p2pTransactionsAtom } from "@repo/store/p2pTransactionsAtom"
+import p2pTransactionRequest from "../lib/actions/p2ptransactionRequest"
 
 
 type Beneficiary = {
@@ -68,8 +70,28 @@ const BeneficiaryCard = ({ transfers }: { transfers: Beneficiary[] }) => {
     }
 
 
-    function handleRequestMoney(email: string) {
-        console.log("handleRequestMoney got clicked !", email)
+    const handleRequestMoney = async (email: string) => {
+        const { message, transactionRequest, error } = await p2pTransactionRequest(email, p2ptransactionDetails.amount * 100);
+
+        if (error) {
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: error,
+                variant: "destructive"
+            })
+            return;
+        }
+
+        if (message) {
+            console.log(transactionRequest)
+            toast({
+                title: "Request Sent Successfully.",
+                description: message,
+                variant: "success"
+            })
+        }
+
+
     }
 
 
@@ -103,7 +125,7 @@ const BeneficiaryCard = ({ transfers }: { transfers: Beneficiary[] }) => {
                                                 <Label htmlFor="name" className="text-right">
                                                     Beneficiary Id
                                                 </Label>
-                                                <Input id="name" value={beneficiary.email} className="col-span-3" />
+                                                <Input id="name" readOnly defaultValue={beneficiary.email} className="col-span-3" />
                                             </div>
                                             <div className="grid grid-cols-4 items-center gap-4">
                                                 <Label htmlFor="amount" className="text-right">
@@ -113,11 +135,45 @@ const BeneficiaryCard = ({ transfers }: { transfers: Beneficiary[] }) => {
                                             </div>
                                         </div>
                                         <DialogFooter>
-                                            <Button type="submit" onClick={() => handleSendMoney(beneficiary.email)}>Send</Button>
+                                            <DialogClose asChild>
+
+                                                <Button type="submit" onClick={() => handleSendMoney(beneficiary.email)}>Send</Button>
+                                            </DialogClose>
                                         </DialogFooter>
                                     </DialogContent>
                                 </Dialog>
-                                <Button onClick={() => handleRequestMoney(beneficiary.email)}>Request Money</Button>
+                                <Dialog >
+                                    <DialogTrigger asChild>
+                                        <Button>Request Money</Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                            <DialogTitle>Enter Beneficiary Details</DialogTitle>
+                                            <DialogDescription>
+                                                Make sure to your profile here. Click save when you're done.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <div className="grid gap-4 py-4">
+                                            <div className="grid grid-cols-4 items-center gap-4">
+                                                <Label htmlFor="name" className="text-right">
+                                                    Beneficiary Id
+                                                </Label>
+                                                <Input id="name" readOnly defaultValue={beneficiary.email} className="col-span-3" />
+                                            </div>
+                                            <div className="grid grid-cols-4 items-center gap-4">
+                                                <Label htmlFor="amount" className="text-right">
+                                                    Amount
+                                                </Label>
+                                                <Input id="amount" onChange={(e) => setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, amount: Number(e.target.value) }))} value={p2ptransactionDetails.amount} className="col-span-3" />
+                                            </div>
+                                        </div>
+                                        <DialogFooter>
+                                            <DialogClose asChild>
+                                                <Button type="submit" onClick={() => handleRequestMoney(beneficiary.email)}>Request Money</Button>
+                                            </DialogClose>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         </div>
                     ))

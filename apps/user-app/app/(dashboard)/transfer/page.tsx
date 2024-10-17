@@ -4,10 +4,6 @@ import OnRampTransactionCard from "../../components/onRampTransactionCard"
 import prisma from "@repo/db/client"
 import { auth } from "@/app/lib/auth"
 
-
-
-
-
 async function getOnrampTransactions() {
     const session = await auth()
     const transactions = await prisma.onRampTransaction.findMany({
@@ -58,12 +54,14 @@ const page = async () => {
 
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-            <AddMoneyCard amount={balance.amount} locked={balance.locked} />
-            <div className="flex flex-col">
 
+            <AddMoneyCard amount={balance.amount} locked={balance.locked} />
+
+            <div className="flex flex-col">
                 <BalanceCard />
                 <OnRampTransactionCard transactions={transactions} />
             </div>
+
         </div>
     )
 }

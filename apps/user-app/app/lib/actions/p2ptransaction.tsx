@@ -13,9 +13,8 @@ export default async function p2ptransaction(email: string, amount: number) {
             error: "An Error occured while sending ..!"
         }
     }
+
     try {
-
-
         const toUser = await prisma.user.findFirst({
             where: {
                 email: email
@@ -81,6 +80,8 @@ export default async function p2ptransaction(email: string, amount: number) {
             message: "Transfer Completed !!",
             response
         }
+
+
     } catch (error) {
         console.log(error)
         return {

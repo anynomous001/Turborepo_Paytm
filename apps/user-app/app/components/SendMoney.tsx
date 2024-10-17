@@ -4,24 +4,24 @@ import { Card } from "@repo/ui/card"
 import Input from "@repo/ui/Input"
 import p2ptransaction from '../lib/actions/p2ptransaction'
 import { Button } from '@/components/ui/button'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { p2pTransactionsAtom } from '@repo/store/p2pTransactionsAtom'
+import { p2pTransactionsInfoAtom } from '@repo/store/p2pTransactionsInfoAtom'
 import { useToast } from '@/hooks/use-toast'
 
 const SendMoney = () => {
-    const [amount, setAmount] = React.useState("0")
-    const [email, setEmail] = React.useState("")
-    const [status, setStatus] = React.useState("")
+    const [p2ptransactionDetails, setP2ptransactionDetails] = useRecoilState(p2pTransactionsInfoAtom)
     const setP2pTransactionInfo = useSetRecoilState(p2pTransactionsAtom)
     const { toast } = useToast()
 
 
 
-    async function handleP2pBalanceTransfer() {
-        const { message, response, error } = await p2ptransaction(email, Number(amount) * 100);
+    const handleP2pBalanceTransfer = async () => {
+
+        const { message, response, error } = await p2ptransaction(p2ptransactionDetails.email, p2ptransactionDetails.amount * 100);
 
         if (error) {
-            setStatus(error);
+            setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, status: error }))
             toast({
                 title: "Uh oh! Something went wrong.",
                 description: error,
@@ -31,7 +31,7 @@ const SendMoney = () => {
         }
 
         if (message) {
-            setStatus(message);
+            setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, status: message }))
             setP2pTransactionInfo((prevP2pBalanceTransfer) => ({
                 transactions: [
                     ...prevP2pBalanceTransfer.transactions,
@@ -42,18 +42,15 @@ const SendMoney = () => {
                         toUser: response.toUserId
                     }
                 ]
-            }));
+            }))
 
             toast({
                 title: "Transaction Completed!!",
                 description: message,
                 variant: "success"
-            });
+            })
         }
     }
-
-
-
 
     return (
         <Card title="Send Money">
@@ -61,11 +58,11 @@ const SendMoney = () => {
                 <div className="flex flex-col gap-4">
                     <Input label="Email" placeHolder="demo@gmail.com"
                         onChange={(value) => {
-                            setEmail(value)
+                            setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, email: value }))
                         }} />
                     <Input label="Amount" placeHolder="Ex. 1000"
                         onChange={(value) => {
-                            setAmount(value)
+                            setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, amount: Number(value) }))
                         }} />
 
                 </div>
@@ -78,7 +75,7 @@ const SendMoney = () => {
                         } >Send Money</Button>
                 </div>
             </div>
-            <p>{status}</p>
+            <p>{p2ptransactionDetails.status}</p>
         </Card>
     )
 }

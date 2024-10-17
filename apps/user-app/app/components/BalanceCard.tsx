@@ -12,9 +12,6 @@ export const BalanceCard = () => {
 
     const totalBalance = useRecoilValue(balanceAtom);
 
-
-
-
     return <Card title={"Balance"}>
         <div className="flex flex-col gap-2 p-4">
             <div className="flex justify-between border-b border-slate-300 pb-2">

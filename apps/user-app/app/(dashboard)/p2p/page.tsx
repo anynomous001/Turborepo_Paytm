@@ -2,6 +2,7 @@ import prisma from "@repo/db/client"
 import SendMoney from "../../components/SendMoney"
 import P2pTransactionsCard from "../../components/p2pTransactionCard"
 import { auth } from "@/app/lib/auth"
+import { RequestCard } from "@/app/components/requestCard"
 
 
 async function getp2pTransactionRecord() {
@@ -29,16 +30,65 @@ async function getp2pTransactionRecord() {
 
 }
 
+export async function getRequestedInfo() {
+    const session = await auth()
+
+    if (!session?.user?.id) {
+        throw new Error("User ID is missing from session");
+    }
+
+
+
+
+    try {
+        const requests = await prisma.moneyRequest.findMany({
+            where: {
+                toUserId: Number(session?.user?.id)
+            },
+            select: {
+                amount: true,
+                fromUser: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+
+                }
+            }
+
+        })
+
+        if (!requests) {
+            return null
+        }
+
+        console.log(requests)
+        return requests.map(req => ({
+            amount: req.amount,
+            name: req.fromUser.name,
+            email: req.fromUser.email
+        }))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
 const page = async () => {
 
     const p2pTransactions = await getp2pTransactionRecord()
+    const p2pRequest = await getRequestedInfo()
 
-
+    console.log(p2pRequest?.map(req => req.amount) + 'jhbhbhjkbhkbkhbhkb')
     return (
         <div className="flex  pt-20 justify-around gap-6  min-h-full min-w-full ">
-            <SendMoney />
-            <P2pTransactionsCard transactions={p2pTransactions} />
+            <div>
+                <SendMoney />
+                <RequestCard p2pRequests={p2pRequest} />
 
+            </div>
+            <P2pTransactionsCard transactions={p2pTransactions} />
         </div>
     )
 }

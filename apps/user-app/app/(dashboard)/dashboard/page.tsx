@@ -1,7 +1,8 @@
 import BeneficiaryCard from "@/app/components/beneficiary";
 import { getBalance } from "../transfer/page";
 import { auth } from "@/app/lib/auth";
-import prisma from "@repo/db/client";
+import { prisma } from "@repo/db/client";
+import DashboardBalance from "@/app/components/dashboardBalance";
 
 const getBeneficiary = async () => {
     const session = await auth();
@@ -43,11 +44,10 @@ const page = async () => {
             <h3 className="text-3xl font-bold">Good Afternoon</h3>
             <h1 className="text-3xl font-bold opacity-20">WelCome to PlayTM</h1>
         </div>
-        <div>
-            <p className="font-bold text-slate-900 text-4xl">Your Balance, <span className="font-bold text-slate-300 text-6xl">{balance?.amount}</span> </p>
-        </div>
+
+        <DashboardBalance amount={balance.amount} locked={balance.locked} />
         <div className="mt-6">
-            <BeneficiaryCard transfers={beneficiaries} />
+            <BeneficiaryCard transfers={beneficiaries || []} />
         </div>
     </div>
 }

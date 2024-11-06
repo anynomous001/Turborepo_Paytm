@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@repo/db/client";
+import { prisma } from "@repo/db/client";
 import { auth } from "../auth";
 
 
@@ -49,8 +49,7 @@ export default async function p2pTransactionRequest(email: string, amount: numbe
             transactionRequest
         }
 
-    } catch (error) {
-        console.log(error?.message)
+    } catch (error: any) {
         return {
             error: error?.message || "Some unexpected error took place !!"
         }

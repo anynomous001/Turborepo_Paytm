@@ -1,8 +1,8 @@
 'use client'
 
 import { Card } from "@repo/ui/card"
-import { OnRampTransactionProps, transactionAtom, TransactionState } from "@repo/store/transactionAtom"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { OnRampTransactionProps, transactionAtom } from "@repo/store/transactionAtom"
+import { useRecoilState } from "recoil"
 import React from "react"
 
 
@@ -35,11 +35,12 @@ const OnRampTransactionCard = ({ transactions }: OnRampTransactionCardProps) => 
                         Received INR
                     </div>
                     <div className="text-slate-600 text-xs">
-                        {t.time.toDateString()}
+                        {t.time ? t.time.toDateString() : 'Unknown Date'}
                     </div>
                 </div>
                 <div className="flex flex-col justify-center">
-                    + Rs {t.amount / 100}
+                    + Rs  {t.amount ? t.amount / 100 : 'Unknown Amount'}
+
                 </div>
 
             </div>)}

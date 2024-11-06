@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,14 +17,11 @@ const Auth = () => {
     const {
         handleSubmit,
         register,
-        setError,
         formState: { errors, isSubmitting }
     } = useForm<SigninInputType>({
         resolver: zodResolver(signinInput),
         defaultValues: {
-            number: "",
             password: "",
-            name: "",
             email: "",
         }
     })
@@ -55,24 +51,24 @@ const Auth = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
                         {globalError && <ErrorMessage error={globalError} />}
-                        <Label htmlFor='name' className=''>
+                        {/* <Label htmlFor='name' className=''>
                             Name
                         </Label>
                         <Input className='bg-white' placeholder='John Doe' type='text' id='name' {...register('name')} />
                         {errors.name && <p className='text-red-500'>{errors.name?.message}</p>
-                        }
+                        } */}
                         <Label htmlFor='password' className=''>
                             Password
                         </Label>
                         <Input className='bg-white' placeholder='******' type='password' id='password' {...register('password')} />
                         {errors.password && <p className='text-red-500'>{errors.password.message}</p>
                         }
-                        <Label htmlFor='number' className=''>
+                        {/* <Label htmlFor='number' className=''>
                             Number
                         </Label>
                         <Input className='bg-white' placeholder='98743532' type='text' id='number' {...register('number')} />
                         {errors.number && <p className='text-red-500'>{errors.number.message}</p>
-                        }
+                        } */}
                         <Label htmlFor='email' className=''>
                             Email
                         </Label>
@@ -81,7 +77,7 @@ const Auth = () => {
                         }
                         <LoadingButton
                             pending={isSubmitting}
-                        />
+                        >Sign In</LoadingButton>
                     </form>
                 </div>
             </div>

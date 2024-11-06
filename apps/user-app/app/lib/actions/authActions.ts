@@ -1,7 +1,7 @@
 "use server"
 
 import { SigninInputType, signupInput, SignupInputType } from "@repo/zod/zodTypes"
-import client from '@repo/db/client'
+import { prisma } from '@repo/db/client'
 import { AuthError } from "next-auth"
 import bcryptjs from "bcryptjs"
 import { signIn, signOut } from "../auth"
@@ -16,7 +16,7 @@ export async function handleCredentialsSignup({ email, password, number, name }:
             return { success: false, message: "Invalid data." }
         }
         // checking if the email is already taken
-        const existingUser = await client.user.findUnique({
+        const existingUser = await prisma.user.findUnique({
             where: {
                 email,
             }
@@ -28,7 +28,7 @@ export async function handleCredentialsSignup({ email, password, number, name }:
         }
         const hashedPassword = await bcryptjs.hash(password, 10)
 
-        await client.user.create({
+        await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,

@@ -1,5 +1,5 @@
 import express from "express"
-import db from "@repo/db/client"
+import { prisma } from "@repo/db/client"
 import cors from 'cors';
 
 
@@ -36,7 +36,7 @@ app.post('/hdfcwebhook', async (req, res) => {
 
     try {
 
-        const account = await db.balance.findFirst({
+        const account = await prisma.balance.findFirst({
             where: {
                 userId: Number(paymentInformation.userId)
             }
@@ -47,7 +47,7 @@ app.post('/hdfcwebhook', async (req, res) => {
         if (account) {
 
             transactionOperations = [
-                db.balance.updateMany({
+                prisma.balance.updateMany({
                     where: {
                         userId: Number(paymentInformation.userId)
                     },
@@ -58,7 +58,7 @@ app.post('/hdfcwebhook', async (req, res) => {
                         }
                     }
                 }),
-                db.onRampTransaction.updateMany({
+                prisma.onRampTransaction.updateMany({
                     where: {
                         token: paymentInformation.token
                     },
@@ -73,7 +73,7 @@ app.post('/hdfcwebhook', async (req, res) => {
         } else {
 
             transactionOperations = [
-                db.balance.create({
+                prisma.balance.create({
                     data: {
                         userId: Number(paymentInformation.userId),
                         amount: Number(paymentInformation.amount),
@@ -81,7 +81,7 @@ app.post('/hdfcwebhook', async (req, res) => {
 
                     }
                 }),
-                db.onRampTransaction.updateMany({
+                prisma.onRampTransaction.updateMany({
                     where: {
                         token: paymentInformation.token
                     },
@@ -94,10 +94,10 @@ app.post('/hdfcwebhook', async (req, res) => {
 
         }
 
-        const response = await db.$transaction(transactionOperations)
+        const response = await prisma.$transaction(transactionOperations)
 
 
-        const accountBalance = await db.balance.findFirst({
+        const accountBalance = await prisma.balance.findFirst({
             where: {
                 userId: Number(paymentInformation.userId)
             }

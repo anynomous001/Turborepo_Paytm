@@ -7,11 +7,10 @@ import Input from "@repo/ui/Input";
 import Select from '@repo/ui/Select'
 import React from 'react'
 import createOnrampTransactions from '../lib/actions/createOnrampTransactions';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { balanceAtom, BalanceState, loadingAtom } from '@repo/store/balanceAtom';
+import { useSetRecoilState } from 'recoil';
+import { balanceAtom, BalanceState } from '@repo/store/balanceAtom';
 import axios from 'axios'
-import prisma from '@repo/db/client';
-import { useSession } from 'next-auth/react';
+
 import { transactionAtom } from '@repo/store/transactionAtom';
 
 
@@ -75,6 +74,7 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
         }
 
         console.log(transactions)
+        console.log(redirectUrl)
 
         // setTransactionInfo(transactions)
         setTransactionInfo((prevTransactionState) => ({

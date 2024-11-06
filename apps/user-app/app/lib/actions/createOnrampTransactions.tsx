@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@repo/db/client"
+import { prisma } from "@repo/db/client"
 import { auth } from "../auth";
 
 export default async function createOnrampTransactions(amount: number, provider: string) {

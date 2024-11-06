@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/toaster"
 import SidebarItem from "../components/SidebarItem"
 
 const layout = ({ children }: { children: JSX.Element }) => {

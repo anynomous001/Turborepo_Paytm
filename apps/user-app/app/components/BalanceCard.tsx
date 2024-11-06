@@ -1,9 +1,9 @@
 'use client'
 
 import { Card } from "@repo/ui/card";
-import prisma from "@repo/db/client"
+
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { balanceAtom } from "@repo/store/balanceAtom";
 
 

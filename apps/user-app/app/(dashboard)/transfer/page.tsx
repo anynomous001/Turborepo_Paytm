@@ -1,7 +1,7 @@
 import AddMoneyCard from "../../components/AddMoneyCard"
 import { BalanceCard } from "../../components/BalanceCard"
 import OnRampTransactionCard from "../../components/onRampTransactionCard"
-import prisma from "@repo/db/client"
+import { prisma } from "@repo/db/client"
 import { auth } from "@/app/lib/auth"
 
 async function getOnrampTransactions() {

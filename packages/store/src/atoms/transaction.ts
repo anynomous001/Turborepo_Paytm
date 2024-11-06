@@ -1,10 +1,10 @@
 import { atom } from 'recoil';
 
 export interface OnRampTransactionProps {
-    time: Date,
-    amount: number,
-    status: string,
-    provider: string,
+    time: Date | undefined;
+    amount: number | undefined;
+    status: string | undefined;
+    provider: string | undefined;
 }
 
 export interface TransactionState {

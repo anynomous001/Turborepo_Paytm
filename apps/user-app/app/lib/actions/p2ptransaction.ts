@@ -1,7 +1,16 @@
 'use server'
 
-import prisma from "@repo/db/client";
+import { prisma } from "@repo/db/client";
 import { auth } from "../auth";
+
+// interface P2PTransfer {
+//     fromUserId: number;
+//     toUserId: number;
+//     amount: number;
+//     timeStamp: Date;
+// }
+
+
 
 
 export default async function p2ptransaction(email: string, amount: number) {
@@ -33,8 +42,9 @@ export default async function p2ptransaction(email: string, amount: number) {
             }
         }
 
-        let response = null
-        await prisma.$transaction(async (tx) => {
+        // let response: P2PTransfer | null = null;
+        // let fromUserBalance = null
+        const response = await prisma.$transaction(async (tx) => {
 
             const fromBalance = await tx.balance.findUnique({
                 where: {
@@ -48,7 +58,7 @@ export default async function p2ptransaction(email: string, amount: number) {
                 throw new Error("Insufficient Balance!!");
             }
 
-            await tx.balance.update({
+            const fromUserBalance = await tx.balance.update({
                 where: {
                     userId: Number(from)
                 },
@@ -66,7 +76,7 @@ export default async function p2ptransaction(email: string, amount: number) {
                 }
             })
 
-            response = await tx.p2pTransfer.create({
+            const response = await tx.p2pTransfer.create({
                 data: {
                     fromUserId: Number(from),
                     toUserId: Number(toUser.id),
@@ -74,18 +84,24 @@ export default async function p2ptransaction(email: string, amount: number) {
                     timeStamp: new Date()
                 }
             })
+
+
+            return { response, fromUserBalance }
         })
+
+        console.log(response, 'from p2pserveraction')
 
         return {
             message: "Transfer Completed !!",
-            response
+            response,
+            // fromUserBalance
         }
 
 
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         return {
-            error: error.message || "An error occurred during the transfer."
+            error: error?.message || "An error occurred during the transfer."
         }
     }
 

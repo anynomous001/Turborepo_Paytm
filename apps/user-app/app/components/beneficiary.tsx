@@ -19,9 +19,10 @@ import { useRecoilState, useSetRecoilState } from "recoil"
 import p2ptransaction from "../lib/actions/p2ptransaction"
 import { p2pTransactionsAtom } from "@repo/store/p2pTransactionsAtom"
 import p2pTransactionRequest from "../lib/actions/p2ptransactionRequest"
+import { balanceAtom } from "@repo/store/balanceAtom"
 
 
-type Beneficiary = {
+export type Beneficiary = {
     id: number;
     name: string | null;
     email: string;
@@ -30,12 +31,15 @@ type Beneficiary = {
 const BeneficiaryCard = ({ transfers }: { transfers: Beneficiary[] }) => {
     const [p2ptransactionDetails, setP2ptransactionDetails] = useRecoilState(p2pTransactionsInfoAtom)
     const setP2pTransactionInfo = useSetRecoilState(p2pTransactionsAtom)
+    const setBalanceInfo = useSetRecoilState(balanceAtom)
+
 
     const { toast } = useToast()
 
     const handleSendMoney = async (email: string) => {
 
         const { message, response, error } = await p2ptransaction(email, p2ptransactionDetails.amount * 100);
+
 
         if (error) {
             setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, status: error }))
@@ -49,23 +53,38 @@ const BeneficiaryCard = ({ transfers }: { transfers: Beneficiary[] }) => {
 
         if (message) {
             setP2ptransactionDetails((prevDetails) => ({ ...prevDetails, status: message }))
-            setP2pTransactionInfo((prevP2pBalanceTransfer) => ({
-                transactions: [
-                    ...prevP2pBalanceTransfer.transactions,
-                    {
-                        time: response.timeStamp,
-                        amount: response.amount,
-                        fromUser: response.fromUserId,
-                        toUser: response.toUserId
-                    }
-                ]
-            }))
 
-            toast({
-                title: "Transaction Completed!!",
-                description: message,
-                variant: "success"
-            })
+
+
+            if (response) {
+                setP2pTransactionInfo((prevP2pBalanceTransfer) => ({
+                    transactions: [
+                        ...prevP2pBalanceTransfer.transactions,
+                        {
+                            time: response.response.timeStamp,
+                            amount: response.response.amount,
+                            fromUser: response.response.fromUserId,
+                            toUser: response.response.toUserId
+                        }
+                    ]
+                }));
+
+
+
+                toast({
+                    title: "Transaction Completed!!",
+                    description: message,
+                    variant: "success"
+                });
+
+
+            }
+
+            setBalanceInfo(() => ({
+                amount: response.fromUserBalance?.amount || 0,
+                locked: response.fromUserBalance?.locked || 0,
+            }));
+
         }
     }
 

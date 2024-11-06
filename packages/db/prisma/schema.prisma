@@ -51,28 +51,21 @@ model Account {
 }
 
 model MoneyRequest {
-  id         Int           @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   amount     Int
   fromUserId Int
-  fromUser   User          @relation(name: "RequestFromUserRelation", fields: [fromUserId], references: [id])
+  fromUser   User     @relation(name: "RequestFromUserRelation", fields: [fromUserId], references: [id])
   toUserId   Int
-  toUser     User          @relation(name: "RequestToUserRelation", fields: [toUserId], references: [id])
-  status     RequestStatus @default(Pending)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-}
-
-enum RequestStatus {
-  Pending
-  Approved
-  Declined
-  Cancelled
+  toUser     User     @relation(name: "RequestToUserRelation", fields: [toUserId], references: [id])
+  status     String   @default("Pending")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model p2pTransfer {
   id         Int      @id @default(autoincrement())
   amount     Int
-  timeStamp  DateTime
+  timeStamp  DateTime @default(now())
   fromUserId Int
   fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
   toUserId   Int
@@ -87,14 +80,14 @@ model Merchant {
 }
 
 model OnRampTransaction {
-  id        Int          @id @default(autoincrement())
-  status    OnRampStatus
-  token     String       @unique
+  id        Int      @id @default(autoincrement())
+  status    String   @default("Processing")
+  token     String   @unique
   provider  String
   amount    Int
   startTime DateTime
   userId    Int
-  user      User         @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Balance {
@@ -108,10 +101,4 @@ model Balance {
 enum AuthType {
   Google
   Github
-}
-
-enum OnRampStatus {
-  Success
-  Failure
-  Processing
 }

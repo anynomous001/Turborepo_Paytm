@@ -2,8 +2,8 @@
 
 
 import { Card } from "@repo/ui/card"
-import { p2pTransactionsAtom, P2pTransactionsProps, P2pTransactionState } from "@repo/store/p2pTransactionsAtom"
-import { useRecoilState, useSetRecoilState } from "recoil"
+import { p2pTransactionsAtom, P2pTransactionState } from "@repo/store/p2pTransactionsAtom"
+import { useRecoilState } from "recoil"
 import React from "react"
 import cn from 'classnames'
 import { useSession } from "next-auth/react"
@@ -15,12 +15,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 // }
 
 
-const P2pTransactionsCard = ({ transactions }: P2pTransactionState, { id }: { id: string }) => {
+const P2pTransactionsCard = ({ transactions }: P2pTransactionState) => {
 
     const [p2pTransactionInfo, setP2pTransactionInfo] = useRecoilState(p2pTransactionsAtom)
     const { data: session } = useSession()
 
-    console.log(session?.user?.id)
 
 
     React.useEffect(() => {
@@ -35,9 +34,6 @@ const P2pTransactionsCard = ({ transactions }: P2pTransactionState, { id }: { id
             </div>
         </Card>
     }
-
-
-    console.log(id + ' from p2ptransaction ')
 
     return <ScrollArea className="h-[60vh]  w-[30vw]" >
         <Card title="Recent Transactions">

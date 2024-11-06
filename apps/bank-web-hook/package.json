@@ -17,5 +17,8 @@
     "cors": "^2.8.5",
     "esbuild": "^0.23.0",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17"
   }
 }

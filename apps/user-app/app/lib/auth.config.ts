@@ -1,6 +1,6 @@
 import Credentials from 'next-auth/providers/credentials'
 import bcryptjs from 'bcryptjs'
-import client from "@repo/db/client"
+import { prisma } from "@repo/db/client"
 import { signinInput } from '@repo/zod/zodTypes'
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
@@ -22,7 +22,20 @@ export default {
                 email: { label: "Email", type: "email", placeholder: "Email" },
                 password: { label: "Password", type: "password", placeholder: "Password" }
             },
-            async authorize(credentials: any) {
+            async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
+
+
+
+                // if (!credentials?.email || !credentials?.password) {
+                //     console.error("Missing email or password.");
+                //     return null;
+                // }
+
+                // const parsedCredentials = signinInput.safeParse({
+                //     email: credentials.email as string,
+                //     password: credentials.password as string
+                // });
+
 
                 const parsedCredentials = signinInput.safeParse(credentials)
                 if (!parsedCredentials.success) {
@@ -30,7 +43,7 @@ export default {
 
                     return null
                 }
-                const user = await client.user.findUnique({
+                const user = await prisma.user.findUnique({
                     where: {
                         email: credentials.email as string
                     }
@@ -53,8 +66,18 @@ export default {
                     return null;
                 }
 
-                const { password, ...userWithoutPassword } = user;
-                return userWithoutPassword;
+                return {
+                    id: user.id.toString(),  // Ensuring id is a string
+                    name: user.name,
+                    email: user.email,
+                    emailVerified: user.emailVerified,
+                    image: user.image,
+                    number: user.number,
+                    role: user.role,
+                    isEmailVerified: user.isEmailVerified,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                };
 
             }
         })

@@ -8,7 +8,8 @@ COPY apps ./apps
 COPY packages ./packages
 
 
-RUN npm install --omit=optional
+RUN npm install -g @next/swc-linux-x64-gnu
+RUN npm install
 RUN cd packages/db && npx prisma generate && cd ../..
 
 RUN npm run build

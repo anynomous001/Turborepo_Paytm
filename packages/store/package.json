@@ -18,6 +18,7 @@
     "./balanceAtom": "./src/atoms/balance.ts",
     "./transactionAtom": "./src/atoms/transaction.ts",
     "./p2pTransactionsAtom": "./src/atoms/p2ptransaction.ts",
-    "./p2pTransactionsInfoAtom": "./src/atoms/p2ptransactioninfo.ts"
+    "./p2pTransactionsInfoAtom": "./src/atoms/p2ptransactioninfo.ts",
+    "./p2pRequests": "./src/atoms/p2pRequest.ts"
   }
 }

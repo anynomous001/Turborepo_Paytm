@@ -106,7 +106,6 @@ app.post('/hdfcwebhook', async (req, res) => {
             message: "Captured2",
             response,
             accountBalance
-
         })
 
     } catch (e) {

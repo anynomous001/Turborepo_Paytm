@@ -83,6 +83,8 @@ export default {
         })
 
     ],
+    secret: process.env.AUTH_SECRET,
+
     pages: {
         signIn: "/auth/signin",
         newUser: "/auth/signup",

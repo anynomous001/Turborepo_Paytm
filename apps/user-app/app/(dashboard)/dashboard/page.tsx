@@ -4,6 +4,13 @@ import { auth } from "@/app/lib/auth";
 import { prisma } from "@repo/db/client";
 import DashboardBalance from "@/app/components/dashboardBalance";
 
+// interface beneficiary {
+//     id: number,
+//     name: string,
+//     email: string
+// }[]
+
+
 const getBeneficiary = async () => {
     const session = await auth();
 
@@ -22,9 +29,12 @@ const getBeneficiary = async () => {
         }
     });
     const uniqueBeneficiaries = Array.from(
-        new Map(beneficiary.map(transfer => [transfer.toUser.email, transfer.toUser])).values()
+        new Map(
+            beneficiary.map((transfer: any) => [transfer.toUser.email, transfer.toUser])
+        ).values()
     );
 
+    console.log(uniqueBeneficiaries)
     return uniqueBeneficiaries;
 };
 

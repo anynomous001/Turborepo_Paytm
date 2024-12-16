@@ -37,7 +37,7 @@ async function getBeneficiary(): Promise<Beneficiary[] | []> {
     });
     const uniqueBeneficiaries = Array.from(
         new Map(
-            beneficiary.map((transfer) => [
+            beneficiary.map((transfer: Transfer) => [
                 transfer.toUser.email,
                 transfer.toUser as Beneficiary, // Explicitly cast `transfer.toUser` to `Beneficiary`
             ])

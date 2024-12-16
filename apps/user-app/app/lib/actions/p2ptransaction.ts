@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from "@repo/db/client";
+import { prisma, Prisma } from "@repo/db/client";
 import { auth } from "../auth";
 
 // interface P2PTransfer {
@@ -44,7 +44,7 @@ export default async function p2ptransaction(email: string, amount: number) {
 
         // let response: P2PTransfer | null = null;
         // let fromUserBalance = null
-        const response = await prisma.$transaction(async (tx) => {
+        const response = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
 
             const fromBalance = await tx.balance.findUnique({
                 where: {

@@ -12,7 +12,7 @@ type Beneficiary = {
 
 
 type Transfer = {
-    toUser: beneficiary
+    toUser: Beneficiary
 };
 
 

@@ -42,7 +42,8 @@ async function getBeneficiary(): Promise<Beneficiary[] | []> {
                 transfer.toUser as Beneficiary, // Explicitly cast `transfer.toUser` to `Beneficiary`
             ])
         ).values()
-    );
+    ) as Beneficiary[]; // Explicitly cast the result to Beneficiary[]
+
 
     console.log(uniqueBeneficiaries)
     return uniqueBeneficiaries;

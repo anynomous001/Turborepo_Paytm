@@ -6,7 +6,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "cd ../.. && cd packages/db && npx prisma generate && cd ../.. && turbo build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

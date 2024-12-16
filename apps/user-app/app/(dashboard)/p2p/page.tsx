@@ -23,6 +23,17 @@ interface p2pRequestsProps {
 }
 
 
+type Request = {
+    id: number;
+    amount: number;
+    fromUser: {
+        name: string | null;
+        email: string;
+    };
+    status: string;
+};
+
+
 
 
 async function getp2pTransactionRecord() {
@@ -95,7 +106,7 @@ async function getRequestedInfo(): Promise<p2pRequestsProps[] | null> {
         }
 
         // console.log(requests)
-        return requests.map(req => ({
+        return requests.map((req: Request) => ({
             id: req.id,
             amount: req.amount,
             status: req.status,

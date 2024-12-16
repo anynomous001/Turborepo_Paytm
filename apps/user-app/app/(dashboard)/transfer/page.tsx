@@ -4,6 +4,17 @@ import OnRampTransactionCard from "../../components/onRampTransactionCard"
 import { prisma } from "@repo/db/client"
 import { auth } from "@/app/lib/auth"
 
+type Transaction = {
+    id: number;
+    status: string;
+    token: string;
+    provider: string;
+    amount: number;
+    startTime: Date;
+    userId: number;
+}
+
+
 async function getOnrampTransactions() {
     const session = await auth()
     const transactions = await prisma.onRampTransaction.findMany({
@@ -12,7 +23,7 @@ async function getOnrampTransactions() {
         }
     })
 
-    return transactions.map(transaction => ({
+    return transactions.map((transaction: Transaction) => ({
         time: transaction.startTime,
         amount: transaction.amount,
         status: transaction.status,

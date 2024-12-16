@@ -9,7 +9,7 @@
     "db:generate": "cd packages/db && npx prisma generate && cd ../..",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "npx prisma generate",
-    "vercel-build": "cd packages/db && npx prisma generate && turbo build"
+    "vercel-build": "cd packages/db && npx prisma generate && cd ../.. && turbo build"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

@@ -4,14 +4,21 @@ import { auth } from "@/app/lib/auth";
 import { prisma } from "@repo/db/client";
 import DashboardBalance from "@/app/components/dashboardBalance";
 
-interface beneficiary {
+type Beneficiary = {
     id: number;
     name: string | null;
     email: string;
-}[]
+}
 
 
-async function getBeneficiary(): Promise<beneficiary[] | []> {
+type Transfer = {
+    toUser: beneficiary
+};
+
+
+
+
+async function getBeneficiary(): Promise<Beneficiary[] | []> {
     const session = await auth();
 
     const beneficiary = await prisma.p2pTransfer.findMany({
@@ -30,7 +37,7 @@ async function getBeneficiary(): Promise<beneficiary[] | []> {
     });
     const uniqueBeneficiaries = Array.from(
         new Map(
-            beneficiary.map((transfer) => [transfer.toUser.email, transfer.toUser])
+            beneficiary.map((transfer: Transfer) => [transfer.toUser.email, transfer.toUser])
         ).values()
     );
 

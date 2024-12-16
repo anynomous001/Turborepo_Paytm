@@ -30,7 +30,7 @@ async function getBeneficiary(): Promise<beneficiary[] | []> {
     });
     const uniqueBeneficiaries = Array.from(
         new Map(
-            beneficiary.map((transfer: any) => [transfer.toUser.email, transfer.toUser])
+            beneficiary.map((transfer) => [transfer.toUser.email, transfer.toUser])
         ).values()
     );
 

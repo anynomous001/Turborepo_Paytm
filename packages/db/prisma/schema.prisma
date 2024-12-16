@@ -77,6 +77,7 @@ model Merchant {
   email     String   @unique
   name      String?
   auth_type AuthType
+  image     String?
 }
 
 model OnRampTransaction {

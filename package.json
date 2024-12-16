@@ -2,7 +2,7 @@
   "name": "Turborepo_Paytm",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo run build --filter=web",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "start-user-app": "cd ./apps/user-app && npm run start",

@@ -5,7 +5,13 @@ import { auth } from "@/app/lib/auth"
 import { RequestCard } from "@/app/components/requestCard"
 
 
-
+interface transactions {
+    id: number;
+    amount: number;
+    timeStamp: Date;
+    fromUserId: number;
+    toUserId: number;
+}
 
 
 interface p2pRequestsProps {
@@ -39,7 +45,7 @@ async function getp2pTransactionRecord() {
         }
 
 
-        return transactions.map(transaction => ({
+        return transactions.map((transaction: transactions) => ({
             time: transaction.timeStamp,
             amount: transaction.amount,
             fromUser: transaction.fromUserId,

@@ -111,12 +111,13 @@ app.post('/hdfcwebhook', async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(411).json({
+            error: e,
             message: "Error while processing webhook"
         })
     }
 
 })
 
-app.listen(3002, () => {
-    console.log("Server is running on port 3002")
+app.listen(8080, () => {
+    console.log("Server is running on port 8080")
 })

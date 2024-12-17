@@ -49,7 +49,7 @@ const AddMoneyCard = ({ amount, locked }: BalanceState) => {
             amount
         }
         try {
-            const response = await axios.post('http://localhost:3003/hdfcwebhook', data)
+            const response = await axios.post('http://ec2-13-233-76-181.ap-south-1.compute.amazonaws.com:8080/hdfcwebhook', data)
             console.log('Webhook triggered successfully:', response.data);
             return response.data
 
